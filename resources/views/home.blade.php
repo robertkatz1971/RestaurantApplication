@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">Main Functions</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -14,7 +14,26 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                   <div class="row text-center">
+                       <div class="col-sm-4">
+                            <a href={{ route('management.index') }}>
+                                <h4>Management</h4>
+                                <img width="50px" src={{ asset('images/management.png') }}  />
+                            </a>
+                        </div>
+                       <div class="col-sm-4">
+                            <a href="/cashier">
+                                <h4>Cashier</h4>
+                                <img width="50px" src={{ asset('images/cashier-machine.png') }}  />
+                            </a>
+                    </div>
+                    <div class="col-sm-4">
+                        <a href="/report">
+                            <h4>Report</h4>
+                            <img width="50px" src={{ asset('images/report.png') }}  />
+                        </a>
+                    </div>
+                   </div>
                 </div>
             </div>
         </div>
