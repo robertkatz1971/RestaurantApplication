@@ -15,9 +15,11 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('management.category.index');
-    }
+        $categories = Category::paginate(5);
 
+        return view('management.category.index')
+            ->with('categories', $categories);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -64,9 +66,9 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        //
+        return view('management.category.edit')->with('category', $category);
     }
 
     /**
@@ -76,9 +78,17 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|unique:categories,name|max:255'
+        ]);
+
+        $category->name = $request->name;
+        $category->save();
+
+        $request->session()->flash('status', $request->name . " updated successfully.");
+        return redirect()->route('category.index');
     }
 
     /**
@@ -87,8 +97,13 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, Category $category)
     {
-        //
+        $name = $category->name;
+        $category->delete();
+        
+        $request->session()->flash('status',$name . " deleted successfully.");
+        return redirect()->route('category.index');
+
     }
 }
