@@ -48,12 +48,15 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="category" class="mt-2">Category</label>
+                        <label for="category_id" class="mt-2">Category</label>
                         <select name="category_id" id="" class="form-control">
                             @foreach ($categories as $category)
                                 <option value={{ $category->id }}>{{ $category->name }}</option>
                             @endforeach
                         </select>
+                        @error('category_id')
+                            <div class="alert alert-danger mt-2">{{ $message }}</div> 
+                        @enderror
                     </div>
 
                     <button type="submit" class="btn btn-primary mt-3">Save</button>
