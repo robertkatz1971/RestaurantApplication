@@ -30,3 +30,4 @@ Route::get('/management', function () {
 })->name('management.index');
 
 Route::resource('management/category','Management\CategoryController');
+Route::resource('management/menu','Management\MenuController');
