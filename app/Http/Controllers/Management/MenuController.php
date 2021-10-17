@@ -86,8 +86,10 @@ class MenuController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(Menu $menu)
-    {
-        return view('management.menu.edit')->with('menu', $menu);
+    {   
+        return view('management.menu.edit')
+            ->with('menu', $menu)
+            ->with('categories', Category::all()->sortBy('name'));
     }
 
     /**
@@ -100,11 +102,29 @@ class MenuController extends Controller
     public function update(Request $request, Menu $menu)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:categories,name|max:255'
+            'name' => 'required|max:255',
+            'price' => 'required|numeric|gt:0',
+            'category_id' => 'required|numeric',
         ]);
 
+        if ($request->image) {
+            $request->validate([
+                'image' => 'nullable|file|image|mimes:jpeg,png,jpg|max:5000'
+            ]);
+            if ($menu->image != "noImage.png") {
+                unlink(public_path('menu_images') . '/' . $menu->image);
+            }
+            $imageName = date('mdYHis').uniqid(). '.' .$request->image->extension();
+            $request->image->move(public_path('menu_images'), $imageName);
+            $menu->image = $imageName;
+        }
+
         $menu->name = $request->name;
-        $menu->save();
+        $menu->price = $request->price;
+        $menu->category_id = $request->category_id;
+        $menu->description = $request->description;
+        
+        $menu->update();
 
         $request->session()->flash('status', $request->name . " updated successfully.");
         return redirect()->route('menu.index');
@@ -119,6 +139,9 @@ class MenuController extends Controller
     public function destroy(Request $request, Menu $menu)
     {
         $name = $menu->name;
+        if ($menu->image != 'noImage.png') {
+            unlink(public_path('menu_images') . '/' . $menu->image);
+        }
         $menu->delete();
         
         $request->session()->flash('status',$name . " deleted successfully.");

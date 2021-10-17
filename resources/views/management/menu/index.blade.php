@@ -22,7 +22,11 @@
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Menu</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Description</th>
                             <th scope="col">Edit</th>
                             <th scope="col">Delete</th>
                         </tr>
@@ -31,6 +35,14 @@
                         <tr>
                             <th scope="row">{{ $menu->id  }}</th>
                             <td>{{ $menu->name }}</td>
+                            <td>{{ $menu->price }}</td>
+                            <td>
+                                <img src="{{asset('menu_images')}}/{{$menu->image }}" alt="{{ $menu->name }}"
+                                    width="120px" height="120px" class="img-thumbnail">
+                            </td>
+                            <td>{{ $menu->category->name }}</td>
+                            <td>{{ $menu->description }}</td>
+
                             <td>
                                 <a href="{{ route('menu.edit', ['menu' => $menu]) }}" 
                                     class="btn btn-warning">Edit
