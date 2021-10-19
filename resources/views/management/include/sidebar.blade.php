@@ -6,7 +6,7 @@
         <a class="list-group-item list-group-item-action" href={{ route('menu.index') }}>
             <i class="fas fa-utensils"></i> Menu
         </a>
-        <a class="list-group-item list-group-item-action" href="">
+        <a class="list-group-item list-group-item-action" href="{{ route('table.index') }}">
             <i class="fas fa-receipt"></i> Table
         </a>
         <a class="list-group-item list-group-item-action" href="">
