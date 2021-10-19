@@ -32,3 +32,5 @@ Route::get('/management', function () {
 Route::resource('management/category','Management\CategoryController');
 Route::resource('management/menu','Management\MenuController');
 Route::resource('management/table','Management\TableController');
+Route::get('/cashier', 'Cashier\CashierController@index')->name('cashier.index');
+Route::get('/cashier/getTable', 'Cashier\CashierController@getTables');
