@@ -22,7 +22,8 @@ class CashierController extends Controller
         $html = '';
         foreach($tables as $table) {
             $html .= '<div class="col-md-2 mb-4 "> ';
-            $html .= '<button class="btn btn-primary">
+            $html .= '<button class="btn btn-primary btn-table" data-id="' . $table->id . '"
+             data-name="' . $table->name . '">
             <img class="img-fluid" src="' . url('/images/table.svg') . '"/>
             <br>
             <span class="badge badge-success">' . $table->name . '</span>
@@ -41,7 +42,7 @@ class CashierController extends Controller
         foreach($menus as $menu) {
             $html .= '
                 <div class="col-md-3 text-center"> 
-                    <a class="btn btn-outline-secondary" data-id="' . $menu->id . '">
+                    <a class="btn btn-outline-secondary btn-menu" data-id="' . $menu->id . '">
                         <img class="img-fluid" src="' . url('/menu_images/' . 
                         $menu->image) . '">
                         <br>
@@ -51,5 +52,11 @@ class CashierController extends Controller
         }
 
         return $html;
+    }
+
+    public function orderFood(Request $request) {
+
+        $menuId = $request->menu_id;
+        return $menuId;
     }
 }

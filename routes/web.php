@@ -35,3 +35,4 @@ Route::resource('management/table','Management\TableController');
 Route::get('/cashier', 'Cashier\CashierController@index')->name('cashier.index');
 Route::get('/cashier/getTable', 'Cashier\CashierController@getTables');
 Route::get('/cashier/getMenuByCategory/{categoryid}', 'Cashier\CashierController@getMenuByCategory');
+Route::post('/cashier/orderFood', 'Cashier\CashierController@orderFood');

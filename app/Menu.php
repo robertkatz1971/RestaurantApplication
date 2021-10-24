@@ -11,4 +11,8 @@ class Menu extends Model
     public function category() {
         return $this->belongsTo(Category::class);
     }
+
+    public function saleDetails() {
+        return $this->hasMany(SaleDetail::class);
+    }
 }

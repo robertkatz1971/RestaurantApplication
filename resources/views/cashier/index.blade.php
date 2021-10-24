@@ -6,6 +6,11 @@
     <div class="row justify-content-center">
         <div class="col-md-5">
             <button class="btn btn-primary btn-block mt-2" id="btn-show-tables">View All Tables</button>
+        
+            <div id="selected-table">
+            </div>
+            <div id="order-detail">
+            </div>
         </div>
         <div class="col-md-7">
             <nav>
@@ -41,7 +46,7 @@
                 $("#table-detail").slideUp('fast');
                 $("#btn-show-tables").html('View All Tables')
                     .removeClass('btn-danger')
-                    .addClass('btn-primary');;
+                    .addClass('btn-primary');
             }
             
         })
@@ -54,6 +59,42 @@
                 $("#list-menu").fadeIn('fast');
             });
         });
+
+        var selectedTableId = "";
+        var selectedTableName = "";
+
+        //detect button table click event to show table details
+        $("#table-detail").on("click", ".btn-table", function () {
+            selectedTableId = $(this).data('id');
+            selectedTableName = $(this).data('name');
+
+            $("#selected-table").html('<br /><h3>Table: ' + selectedTableName + '</h3><hr>');
+        });
+
+        //detect clicking on menu item and associate with table 
+        $("#list-menu").on("click", ".btn-menu", function () {
+            if (selectedTableId == "") {
+                alert("You must select a table prior to choosing a menu item!");
+            } else {
+                var selectedMenuId = $(this).data('id');    
+                
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        "_token" : $('meta[name="csrf-token"]').attr('content'),
+                        "menu_id" : selectedMenuId,
+                        "table_id" : selectedTableId,
+                        "table_name" : selectedTableName,
+                        "quantity" : 1
+                    },
+                    url: "cashier/orderFood",
+                    success: function (data) {
+                        $("#order-detail").html(data);
+                    }
+                });
+            }
+        });
+
     });
 </script>
 @endsection

@@ -10,7 +10,7 @@
             <form action="{{ route('category.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="name">Menu Name</label>
+                    <label for="name">Category Name</label>
                     <input type="text" name="name" class="form-control" placeholder="{{ old('name') ?? 'Category Name...' }}">
                     @error('name')
                         <div class="alert alert-danger mt-2">{{ $message }}</div> 
