@@ -18,7 +18,7 @@ class CreateSaleDetailsTable extends Migration
             $table->foreignId('sale_id')->constrained();
             $table->foreignId('menu_id')->constrained();
             $table->string('menu_name');
-            $table->integer('menu_price');
+            $table->decimal('menu_price');
             $table->integer('quantity');
             $table->string('status')->default('noConfirm'); //confirm or noConfirm
             $table->timestamps();

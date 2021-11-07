@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Cashier;
 
 use App\Menu;
+use App\Sale;
 use App\Table;
 use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\SaleDetail;
+use Illuminate\Support\Facades\Auth;
 
 class CashierController extends Controller
 {
@@ -47,7 +50,8 @@ class CashierController extends Controller
                         $menu->image) . '">
                         <br>
                         ' . $menu->name . '
-                        $' . number_format($menu->price) . 
+                        <br>
+                        $' . number_format($menu->price, 2) . 
                     '</a></div>';
         }
 
@@ -56,7 +60,50 @@ class CashierController extends Controller
 
     public function orderFood(Request $request) {
 
-        $menuId = $request->menu_id;
-        return $menuId;
+        $menu = Menu::findOrFail($request->menu_id);
+
+        $table_id = $request->table_id;
+        $table_name = $request->table_name;
+
+        $sale = Sale::where('table_id', $table_id)->where('sale_status', 'unpaid')->first();
+    
+
+        if ($sale) {
+            //sale already exists for this table which has not been paid
+            $sale_id = $sale->id;
+
+        } else {
+            //sale doesn't exist so create
+            $user = Auth::user();
+
+            $sale = new Sale();
+            $sale->table_id = $table_id;
+            $sale->table_name = $table_name;
+            $sale->user_id = $user->id;
+            $sale->user_name = $user->name;
+            $sale->save();
+
+            $sale_id = $sale->id;
+            
+            $table = Table::findOrFail($table_id);
+            $table->status = "unavailable";
+            $table->save();
+
+        }
+      
+        // add ordered menu to the sales-details table
+        $saleDetail = new SaleDetail();
+        $saleDetail->sale_id = $sale_id;
+        $saleDetail->menu_id = $menu->id;
+        $saleDetail->menu_price = $menu->price;
+        $saleDetail->menu_name = $menu->name; 
+        $saleDetail->quantity = $request->quantity;
+        $saleDetail->save();
+        
+        //update total price in sales table
+        $sale->total_price = $sale->total_price + ($request->quantity * $menu->price);
+        $sale->save();
+
+        return $sale->total_price;
     }
 }
