@@ -67,8 +67,10 @@
         $("#table-detail").on("click", ".btn-table", function () {
             selectedTableId = $(this).data('id');
             selectedTableName = $(this).data('name');
-
             $("#selected-table").html('<br /><h3>Table: ' + selectedTableName + '</h3><hr>');
+            $.get("/cashier/getSaleDetailsByTable/" + selectedTableId, function(data) {
+                $("#order-detail").html(data);
+            })
         });
 
         //detect clicking on menu item and associate with table 
@@ -93,6 +95,22 @@
                     }
                 });
             }
+        });
+
+        $("#order-detail").on('click', ".btn-confirm-order", function () {
+            var saleId = $(this).data("id");
+            $.ajax({
+                type: "POST",
+                data: {
+                    "_token" : $('meta[name="csrf-token"]').attr('content'),
+                    "sale_id" : saleId,
+                },
+                url: "/cashier/confirmOrderStatus",
+                success: function(data) {
+                    $("#order-detail").html(data);
+                }
+            });
+
         });
 
     });
